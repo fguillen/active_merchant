@@ -21,7 +21,6 @@ module ActiveMerchant #:nodoc:
       DISPOSITION_DISPOSED = 'D'
       DISPOSITION_EXPIRED = 'X'
 
-
       def initialize(options = {})
         requires!(options, :merchant_id, :business_type, :pem, :pem_password)
         @options = options
