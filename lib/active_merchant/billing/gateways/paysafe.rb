@@ -22,7 +22,7 @@ module ActiveMerchant #:nodoc:
       DISPOSITION_EXPIRED = 'X'
 
       def initialize(options = {})
-        requires!(options, :merchant_id, :business_type, :pem, :pem_password, :ca_file)
+        requires!(options, :merchant_id, :business_type, :pem, :pem_password, :ca_file, :currency)
         @options = options
         super
       end
@@ -35,7 +35,7 @@ module ActiveMerchant #:nodoc:
       end
 
       def authorize(options = {})
-        requires!(options, :subid, :amount, :return_url, :cancel_return_url, :currency)
+        requires!(options, :subid, :amount, :return_url, :cancel_return_url)
         post = {}
         add_boilerplate_info(post)
         add_transaction_data(post, options)
@@ -56,7 +56,7 @@ module ActiveMerchant #:nodoc:
       end
 
       def capture(options = {})
-        requires!(options, :subid, :amount, :currency)
+        requires!(options, :subid, :amount)
         post = { :close => 1 }
         add_boilerplate_info(post)
         add_transaction_data(post, options)
@@ -66,8 +66,8 @@ module ActiveMerchant #:nodoc:
       end
 
       def redirect_url(options = {})
-        requires!(options, :subid, :amount, :currency, :language)
-        customer_url + "?currency=#{options[:currency]}&mid=#{@options[:merchant_id]}&mtid=#{options[:subid]}&amount=#{options[:amount]}&language=#{options[:language]}"
+        requires!(options, :subid, :amount, :language)
+        customer_url + "?currency=#{@options[:currency]}&mid=#{@options[:merchant_id]}&mtid=#{options[:subid]}&amount=#{ "%.2f" % options[:amount]}&language=#{options[:language]}"
       end
 
       private
@@ -82,7 +82,7 @@ module ActiveMerchant #:nodoc:
       end
 
       def add_purchase_data(post, options)
-        post[:currency] = options[:currency]
+        post[:currency] = @options[:currency]
         post[:amount] = '%.2f' % options[:amount]
         post[:businesstype] = @options[:business_type]
       end
