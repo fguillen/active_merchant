@@ -42,6 +42,7 @@ module ActiveMerchant #:nodoc:
       
       connection.pem          = @options[:pem] if @options
       connection.pem_password = @options[:pem_password] if @options
+      connection.ca_file      = @options[:ca_file] if @options
       
       connection.request(method, data, headers)
     end
