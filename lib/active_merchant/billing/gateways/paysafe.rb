@@ -90,7 +90,7 @@ module ActiveMerchant #:nodoc:
 
       def add_ok_urls(post, options)
         post[:okurl] = options[:okurl]
-        post[:nokurl] = options[:cancel_okurl]
+        post[:nokurl] = options[:nokurl]
       end
 
       def commit(action, parameters)
