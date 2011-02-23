@@ -1,5 +1,4 @@
 #from: https://github.com/stopdropandrew/active_merchant
-
 module ActiveMerchant #:nodoc:
   module Billing #:nodoc:
     class PaysafeGateway < Gateway
@@ -24,7 +23,7 @@ module ActiveMerchant #:nodoc:
       DISPOSITION_EXPIRED = 'X'
 
       def initialize(options = {})
-        requires!(options, :merchant_id, :business_type, :pem, :pem_password, :ca_file, :currency)
+        requires!(options, :mid, :business_type, :pem, :pem_password, :ca_file, :currency)
         @options = options
         super
       end
@@ -37,7 +36,7 @@ module ActiveMerchant #:nodoc:
       end
 
       def authorize(options = {})
-        requires!(options, :subid, :amount, :return_url, :cancel_return_url)
+        requires!(options, :mtid, :amount, :okurl, :nokurl)
         post = {}
         add_boilerplate_info(post)
         add_transaction_data(post, options)
@@ -48,7 +47,7 @@ module ActiveMerchant #:nodoc:
       end
 
       def check_transaction_status(options)
-        requires!(options, :subid)
+        requires!(options, :mtid)
         post = {}
 
         add_boilerplate_info(post)
@@ -58,7 +57,7 @@ module ActiveMerchant #:nodoc:
       end
 
       def capture(options = {})
-        requires!(options, :subid, :amount)
+        requires!(options, :mtid, :amount)
         post = { :close => 1 }
         add_boilerplate_info(post)
         add_transaction_data(post, options)
@@ -68,19 +67,19 @@ module ActiveMerchant #:nodoc:
       end
 
       def redirect_url(options = {})
-        requires!(options, :subid, :amount, :language)
-        customer_url + "?currency=#{@options[:currency]}&mid=#{@options[:merchant_id]}&mtid=#{options[:subid]}&amount=#{ "%.2f" % options[:amount]}&language=#{options[:language]}"
+        requires!(options, :mtid, :amount, :language)
+        customer_url + "?currency=#{@options[:currency]}&mid=#{@options[:mid]}&mtid=#{options[:mtid]}&amount=#{ "%.2f" % options[:amount]}&language=#{options[:language]}"
       end
 
       private
 
       def add_boilerplate_info(post)
-        post[:mid] = @options[:merchant_id]
+        post[:mid] = @options[:mid]
         post[:outputFormat] = OUTPUT_FORMAT
       end
 
       def add_transaction_data(post, options)
-        post[:mtid] = options[:subid]
+        post[:mtid] = options[:mtid]
       end
 
       def add_purchase_data(post, options)
@@ -90,8 +89,8 @@ module ActiveMerchant #:nodoc:
       end
 
       def add_ok_urls(post, options)
-        post[:okurl] = options[:return_url]
-        post[:nokurl] = options[:cancel_return_url]
+        post[:okurl] = options[:okurl]
+        post[:nokurl] = options[:cancel_okurl]
       end
 
       def commit(action, parameters)
@@ -118,12 +117,12 @@ module ActiveMerchant #:nodoc:
       end
 
       def api_url(action)
-        merchant_id = test? ? 'test' : options[:merchant_id]
+        merchant_id = test? ? 'test' : options[:mid]
         BASE_URL % [ merchant_id, action ]
       end
 
       def customer_url
-        merchant_id = test? ? 'test' : options[:merchant_id]
+        merchant_id = test? ? 'test' : options[:mid]
         CUSTOMER_BASE_URL % merchant_id
       end
     end

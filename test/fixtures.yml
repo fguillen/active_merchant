@@ -420,9 +420,10 @@ direc_pay:
   mid: 200904281000001
 
 paysafe:
-  merchant_id: your-merchant-id
+  mid: your-merchant-id
   business_type: I # change this if you want
   currency: ARS # your test currency
   pem_password: secret
   pem: |--
     PASTE YOUR PEM FILE HERE
+  ca_file: path-to-ca-file

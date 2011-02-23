@@ -9,10 +9,9 @@ class PaysafeTest < Test::Unit::TestCase
       :currency => 'EUR',
       :transaction_id => 'cool-trans',
       :amount => 20,
-      :return_url => 'http://www.kongregate.com/paysafe?ok=true',
-      :cancel_return_url => 'http://www.kongregate.com/paysafe?ok=false',
-      :subid => "test-mtid"
-      #TODO: return_url -> ok_url, subid => mtid
+      :okurl => 'http://www.kongregate.com/paysafe?ok=true',
+      :nokurl => 'http://www.kongregate.com/paysafe?ok=false',
+      :mtid => "test-mtid"
     }
   end
   
