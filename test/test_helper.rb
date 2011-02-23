@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+gem 'activesupport'
+gem 'actionpack'
 $:.unshift File.expand_path('../../lib', __FILE__)
 
 require 'rubygems'
@@ -14,12 +16,6 @@ require 'active_support/core_ext/numeric/time'
 begin
   require 'active_support/core_ext/time/acts_like'
 rescue LoadError
-end
-
-begin
-  gem 'actionpack'
-rescue LoadError
-  raise StandardError, "The view tests need ActionPack installed as gem to run"
 end
 
 require 'action_controller'

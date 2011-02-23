@@ -1,3 +1,5 @@
+#from: https://github.com/stopdropandrew/active_merchant
+
 module ActiveMerchant #:nodoc:
   module Billing #:nodoc:
     class PaysafeGateway < Gateway
