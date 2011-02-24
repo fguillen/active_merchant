@@ -422,7 +422,6 @@ direc_pay:
 paysafe:
   mid: your-merchant-id
   business_type: I # change this if you want
-  currency: ARS # your test currency
   pem_password: secret
   pem: |--
     PASTE YOUR PEM FILE HERE

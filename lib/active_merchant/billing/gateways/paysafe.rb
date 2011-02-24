@@ -23,7 +23,7 @@ module ActiveMerchant #:nodoc:
       DISPOSITION_EXPIRED = 'X'
 
       def initialize(options = {})
-        requires!(options, :mid, :business_type, :pem, :pem_password, :ca_file, :currency)
+        requires!(options, :mid, :business_type, :pem, :pem_password, :ca_file)
         @options = options
         super
       end
@@ -36,7 +36,7 @@ module ActiveMerchant #:nodoc:
       end
 
       def authorize(options = {})
-        requires!(options, :mtid, :amount, :okurl, :nokurl)
+        requires!(options, :mtid, :amount, :okurl, :nokurl, :currency)
         post = {}
         add_boilerplate_info(post)
         add_transaction_data(post, options)
@@ -57,7 +57,7 @@ module ActiveMerchant #:nodoc:
       end
 
       def capture(options = {})
-        requires!(options, :mtid, :amount)
+        requires!(options, :mtid, :amount, :currency)
         post = { :close => 1 }
         add_boilerplate_info(post)
         add_transaction_data(post, options)
@@ -83,7 +83,7 @@ module ActiveMerchant #:nodoc:
       end
 
       def add_purchase_data(post, options)
-        post[:currency] = @options[:currency]
+        post[:currency] = options[:currency]
         post[:amount] = '%.2f' % options[:amount]
         post[:businesstype] = @options[:business_type]
       end
