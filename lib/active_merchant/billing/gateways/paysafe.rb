@@ -67,8 +67,8 @@ module ActiveMerchant #:nodoc:
       end
 
       def redirect_url(options = {})
-        requires!(options, :mtid, :amount, :language)
-        customer_url + "?currency=#{@options[:currency]}&mid=#{@options[:mid]}&mtid=#{options[:mtid]}&amount=#{ "%.2f" % options[:amount]}&language=#{options[:language]}"
+        requires!(options, :mtid, :amount, :language, :currency)
+        customer_url + "?currency=#{options[:currency]}&mid=#{@options[:mid]}&mtid=#{options[:mtid]}&amount=#{ "%.2f" % options[:amount]}&language=#{options[:language]}"
       end
 
       private
