@@ -14,7 +14,9 @@ module ActiveMerchant #:nodoc:
 
       # real actions
       AUTHORIZE_ACTION = "CreateDispositionServlet"
-      CHECK_TRANSACTION_ACTION = "GetDispositionStateServlet"
+      #CHECK_TRANSACTION_ACTION = "GetDispositionStateServlet"
+      CHECK_TRANSACTION_ACTION = "GetSerialNumbersServlet"
+
       CAPTURE_ACTION = "DebitServlet"
 
       # disposition statuses
