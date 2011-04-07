@@ -119,12 +119,12 @@ module ActiveMerchant #:nodoc:
       end
 
       def api_url(action)
-        merchant_id = test? ? 'test' : options[:mid]
+        merchant_id = test? ? 'test' : 'cc'
         BASE_URL % [ merchant_id, action ]
       end
 
       def customer_url
-        merchant_id = test? ? 'test' : options[:mid]
+        merchant_id = test? ? 'test' : 'cc'
         CUSTOMER_BASE_URL % merchant_id
       end
     end
