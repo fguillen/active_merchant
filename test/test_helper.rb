@@ -3,12 +3,20 @@ gem 'activesupport'
 gem 'actionpack'
 $:.unshift File.expand_path('../../lib', __FILE__)
 
-require 'rubygems'
+begin
+  require 'rubygems'
+  require 'bundler'
+  Bundler.setup
+rescue LoadError => e
+  puts "Error loading bundler (#{e.message}): \"gem install bundler\" for bundler support."
+end
+
 require 'test/unit'
 require 'money'
 require 'mocha'
 require 'yaml'
 require 'active_merchant'
+require 'comm_stub'
 
 require 'active_support/core_ext/integer/time'
 require 'active_support/core_ext/numeric/time'
@@ -21,6 +29,7 @@ end
 require 'action_controller'
 require "action_view/template"
 begin
+  require 'active_support/core_ext/module/deprecation'
   require 'action_dispatch/testing/test_process'
 rescue LoadError
   require 'action_controller/test_process'
@@ -29,8 +38,11 @@ require 'active_merchant/billing/integrations/action_view_helper'
 
 ActiveMerchant::Billing::Base.mode = :test
 
-require 'logger'
-ActiveMerchant::Billing::Gateway.logger = Logger.new(STDOUT) if ENV['DEBUG_ACTIVE_MERCHANT'] == 'true'
+if ENV['DEBUG_ACTIVE_MERCHANT'] == 'true'
+  require 'logger'
+  ActiveMerchant::Billing::Gateway.logger = Logger.new(STDOUT)
+  ActiveMerchant::Billing::Gateway.wiredump_device = STDOUT
+end
 
 # Test gateways
 class SimpleTestGateway < ActiveMerchant::Billing::Gateway
@@ -102,6 +114,11 @@ module ActiveMerchant
       clean_backtrace do
         assert_false validateable.valid?, "Expected to not be valid"
       end
+    end
+
+    def assert_deprecation_warning(message, target)
+      target.expects(:deprecated).with(message)
+      yield
     end
     
     private
