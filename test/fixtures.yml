@@ -484,10 +484,9 @@ direc_pay:
 
 paysafe:
   mid: your-merchant-id
-  business_type: I # change this if you want
+  business_type: I
   pem_password: secret
-  pem: |--
-    PASTE YOUR PEM FILE HERE
+  pem: PASTE YOUR PEM FILE HERE
   ca_file: path-to-ca-file
 
 world_pay_gateway:
